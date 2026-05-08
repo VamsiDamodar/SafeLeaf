@@ -1,0 +1,48 @@
+name: safeleaf
+description: SafeLeaf — A fully offline, secure document locker app with biometric authentication, PDF export, and zero cloud dependency. Built with Flutter & MVVM.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  local_auth: ^2.1.7
+  flutter_secure_storage: ^9.0.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  image_picker: ^1.0.4
+  pdf: ^3.10.7
+  printing: ^5.11.0
+  share_plus: ^7.2.1
+  path_provider: ^2.1.1
+  permission_handler: ^11.0.1
+  intl: ^0.18.1
+  flutter_svg: ^2.0.7
+  cached_network_image: ^3.3.0
+  get_storage: ^2.1.1
+  flutter_native_splash: ^2.4.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+
+flutter_native_splash:
+  color: "#2D6A4F"
+  color_dark: "#1B4332"
+  android: true
+  ios: true
+  android_12:
+    color: "#2D6A4F"

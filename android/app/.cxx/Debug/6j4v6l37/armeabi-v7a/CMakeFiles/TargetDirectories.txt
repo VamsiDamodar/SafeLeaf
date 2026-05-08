@@ -1,0 +1,2 @@
+C:/Users/n1902/OneDrive/Desktop/My stuff/safeleaf/android/app/.cxx/Debug/6j4v6l37/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/n1902/OneDrive/Desktop/My stuff/safeleaf/android/app/.cxx/Debug/6j4v6l37/armeabi-v7a/CMakeFiles/rebuild_cache.dir
