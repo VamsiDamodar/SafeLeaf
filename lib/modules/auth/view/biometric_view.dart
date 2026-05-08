@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 import 'package:safeleaf/modules/auth/viewmodel/biometric_setup_controller.dart';
 import 'package:safeleaf/utils/app_colors.dart';
 
@@ -66,7 +67,7 @@ class BiometricSetupView extends GetView<BiometricSetupController> {
 
               // ── Title + Subtitle ──
               const Text(
-                'Enable Biometric?',
+                biometricScreenStrings.title,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -75,7 +76,7 @@ class BiometricSetupView extends GetView<BiometricSetupController> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Unlock faster with your\nfingerprint or face',
+                biometricScreenStrings.description,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -91,16 +92,16 @@ class BiometricSetupView extends GetView<BiometricSetupController> {
                 children: [
                   _buildOptionCard(
                     icon: Icons.fingerprint,
-                    title: 'Enable Biometric',
-                    subtitle: 'Fingerprint / Face unlock',
+                    title: biometricScreenStrings.useBiometrics,
+                    subtitle: biometricScreenStrings.fingerprintorFaceUnlock,
                     onTap: controller.enableBiometric,
                     isPrimary: true,
                   ),
                   const SizedBox(height: 12),
                   _buildOptionCard(
                     icon: Icons.close_rounded,
-                    title: 'Skip for now',
-                    subtitle: 'Use PIN only',
+                    title: biometricScreenStrings.skipForNow,
+                    subtitle: biometricScreenStrings.usePinOnly,
                     onTap: controller.skipBiometric,
                     isPrimary: false,
                   ),
@@ -110,7 +111,7 @@ class BiometricSetupView extends GetView<BiometricSetupController> {
               const SizedBox(height: 16),
 
               Text(
-                'You can change this later in Settings',
+                 biometricScreenStrings.youCanChangeThisLater,
                 style: TextStyle(
                   fontSize: 11,
                   color: AppColors.accent.withOpacity(0.7),

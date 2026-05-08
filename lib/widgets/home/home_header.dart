@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 import 'package:safeleaf/utils/app_colors.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -14,7 +15,7 @@ class HomeHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Welcome back,',
+            homeScreenStrings.welcomeBack,
             style: TextStyle(
               color: AppColors.accent,
               fontSize: isCompact ? 13 : 14,
@@ -23,7 +24,7 @@ class HomeHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Your Vault is Secure \u{1F512}',
+            homeScreenStrings.yourDocuments,
             style: TextStyle(
               color: AppColors.primaryDark,
               fontSize: isCompact ? 20 : 17,
@@ -32,7 +33,7 @@ class HomeHeader extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'All documents are stored offline',
+            homeScreenStrings.allDocumentsStoredOffline,
             style: TextStyle(
               color: const Color(0xA31B4332),
               fontSize: isCompact ? 10 : 12,
