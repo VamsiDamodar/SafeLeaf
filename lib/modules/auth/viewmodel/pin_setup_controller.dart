@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 import 'package:safeleaf/routes/app_routes.dart';
 
 class PinSetupController extends GetxController {
@@ -16,16 +17,16 @@ class PinSetupController extends GetxController {
   final RxInt shakeKey = 0.obs;
 
   String get title =>
-      isConfirmStep.value ? 'Confirm your PIN' : 'Create your PIN';
+      isConfirmStep.value ? pinStrings.confirmPin : pinStrings.createPin;
 
   String get subtitle {
     if (showError.value) {
-      return 'PINs do not match. Try again.';
+      return pinStrings.pinMismatch;
     }
 
-    return isConfirmStep.value
-        ? 'Re-enter the 4-digit PIN to make sure it matches.'
-        : 'Set a 4-digit PIN to protect your SafeLeaf vault.';
+      return isConfirmStep.value
+          ? pinStrings.pleaseReenterPin
+        : pinStrings.setyourPin;
   }
 
   int get filledDots => enteredPin.value.length;

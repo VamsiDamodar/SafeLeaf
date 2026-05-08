@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 import 'package:safeleaf/modules/auth/viewmodel/pin_setup_controller.dart';
 import 'package:safeleaf/utils/app_colors.dart';
 import 'package:safeleaf/widgets/createpin/pin_indicators.dart';
@@ -140,7 +141,7 @@ class _StepHeader extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          'Step 1 of 2',
+          pinStrings.step12,
           style: TextStyle(
             color: AppColors.accent.withValues(alpha: 0.78),
             fontSize: isShort ? 11 : 12,

@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 import 'package:safeleaf/routes/app_routes.dart';
 
 class PinLockController extends GetxController {
@@ -17,11 +18,11 @@ class PinLockController extends GetxController {
   final RxInt shakeKey = 0.obs;
   final RxBool isBiometricEnabled = false.obs;
 
-  String get title => 'Enter your PIN';
+  String get title => pinStrings.enteryourPin;
 
   String get subtitle => showError.value
-      ? 'Incorrect PIN. Please try again.'
-      : 'Enter your 4-digit PIN to unlock SafeLeaf.';
+      ? pinStrings.invalidPin
+      : pinStrings.enterPin;
 
   int get filledDots => enteredPin.value.length;
 

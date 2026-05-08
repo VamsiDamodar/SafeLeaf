@@ -6,6 +6,7 @@ import 'package:safeleaf/utils/app_textstyles.dart';
 import 'package:safeleaf/widgets/splash/safeleaf_icon.dart';
 import 'package:safeleaf/widgets/splash/splash_progress_bar.dart';
 import 'package:safeleaf/widgets/splash/splash_bg_circle.dart';
+import 'package:safeleaf/core/constants/strings.dart';
 
 /// SplashView — Pure UI, zero business logic.
 /// All logic lives in SplashController.
@@ -37,7 +38,7 @@ class SplashView extends GetView<SplashController> {
 
                   // App Name
                   const Text(
-                    'SafeLeaf',
+                    splashScreenStrings.appName,
                     style: AppTextStyles.splashAppName,
                   ),
 
@@ -45,7 +46,7 @@ class SplashView extends GetView<SplashController> {
 
                   // Tagline
                   const Text(
-                    'YOUR DOCS. SAFE. ALWAYS.',
+                    splashScreenStrings.tagline,
                     style: AppTextStyles.splashTagline,
                   ),
 
