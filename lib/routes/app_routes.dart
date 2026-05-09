@@ -4,4 +4,5 @@ abstract class Routes {
   static const BIOMETRIC_SETUP = '/biometric-setup';
   static const PIN_LOCK = '/pin-lock';
   static const HOME = '/home';
+  
 }

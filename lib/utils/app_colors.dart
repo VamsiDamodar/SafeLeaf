@@ -19,4 +19,11 @@ class AppColors {
   static const danger       = Color(0xFFE74C3C); // Red for errors/expiry
   static const warning      = Color(0xFFF39C12); // Orange for warnings
   static const safe         = Color(0xFF27AE60); // Green for valid/safe
+
+    // ─── NEW: Card-specific colors ─────────────────────────────────
+  static const cardBackground    = Color(0xFFFAFCF9); // Very light mint
+  static const cardBorder        = Color(0xFFE8F0EB); // Soft green border
+  static const iconBackground    = Color(0xFFE8F3ED); // Light mint for icon box
+  static const textSecondary     = Color(0xFF7A9D8F); // Muted green for "Docs"
+  static const titleDark         = Color(0xFF1B4332); // Dark green for title
 }
