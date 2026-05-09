@@ -36,9 +36,13 @@ class _DocLockPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // ── Document ──────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════
+    // ── LAYER 1: DOCUMENT (Back layer) ────────────────────────────
+    // ══════════════════════════════════════════════════════════════
+    
+    // Document body - medium green
     final docPaint = Paint()
-      ..color = AppColors.accent
+      ..color = const Color(0xFF52B788) // Exact from image
       ..style = PaintingStyle.fill;
 
     final docRect = RRect.fromRectAndRadius(
@@ -47,7 +51,7 @@ class _DocLockPainter extends CustomPainter {
     );
     canvas.drawRRect(docRect, docPaint);
 
-    // Folded corner — clip then draw triangle
+    // Folded corner - light mint green
     final cornerPath = Path()
       ..moveTo(w * 0.38, 0)
       ..lineTo(w * 0.60, h * 0.22)
@@ -55,12 +59,12 @@ class _DocLockPainter extends CustomPainter {
       ..close();
     canvas.drawPath(
       cornerPath,
-      Paint()..color = AppColors.primaryLight.withOpacity(0.85),
+      Paint()..color = const Color(0xFFA8DABC), // Exact from image
     );
 
-    // Doc lines
+    // Doc lines - dark forest green
     final linePaint = Paint()
-      ..color = AppColors.primaryDark
+      ..color = const Color(0xFF1B4332) // Exact from image
       ..strokeWidth = h * 0.040
       ..strokeCap = StrokeCap.round;
 
@@ -75,21 +79,42 @@ class _DocLockPainter extends CustomPainter {
       linePaint,
     );
 
-    // ── Lock ──────────────────────────────────────────────────────
-    // Lock body
+    // ══════════════════════════════════════════════════════════════
+    // ── LAYER 2: LOCK BODY (Middle layer) ─────────────────────────
+    // ══════════════════════════════════════════════════════════════
+    
+    // Lock body - off-white
     final lockBodyRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(w * 0.38, h * 0.52, w * 0.58, h * 0.44),
       Radius.circular(w * 0.10),
     );
     canvas.drawRRect(
       lockBodyRect,
-      Paint()..color = const Color(0xFFF7FBF4),
+      Paint()..color = const Color(0xFFF0F4F1), // Exact from image
     );
 
-    // Lock shackle (arch)
+    // Keyhole circle - dark forest green
+    canvas.drawCircle(
+      Offset(w * 0.67, h * 0.715),
+      w * 0.075,
+      Paint()..color = const Color(0xFF1B4332),
+    );
+
+    // Keyhole stem - dark forest green
+    final stemRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(w * 0.635, h * 0.715, w * 0.07, h * 0.12),
+      const Radius.circular(4),
+    );
+    canvas.drawRRect(stemRect, Paint()..color = const Color(0xFF1B4332));
+
+    // ══════════════════════════════════════════════════════════════
+    // ── LAYER 3: LOCK SHACKLE (Top layer - most visible!) ─────────
+    // ══════════════════════════════════════════════════════════════
+    
+    // Shackle - dark forest green, thicker stroke
     final shacklePaint = Paint()
-      ..color = AppColors.primary
-      ..strokeWidth = h * 0.055
+      ..color = const Color(0xFF1B4332) // Exact from image
+      ..strokeWidth = h * 0.060 // Slightly thicker to match image
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
@@ -103,20 +128,6 @@ class _DocLockPainter extends CustomPainter {
       )
       ..lineTo(w * 0.83, h * 0.52);
     canvas.drawPath(shacklePath, shacklePaint);
-
-    // Keyhole circle
-    canvas.drawCircle(
-      Offset(w * 0.67, h * 0.715),
-      w * 0.075,
-      Paint()..color = AppColors.primary,
-    );
-
-    // Keyhole stem
-    final stemRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(w * 0.635, h * 0.715, w * 0.07, h * 0.12),
-      const Radius.circular(4),
-    );
-    canvas.drawRRect(stemRect, Paint()..color = AppColors.primary);
   }
 
   @override
