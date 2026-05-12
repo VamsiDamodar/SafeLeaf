@@ -10,6 +10,7 @@ import 'package:safeleaf/widgets/home/category_card.dart';
 import 'package:safeleaf/widgets/home/home_drawer.dart';
 import 'package:safeleaf/widgets/home/home_searchbar.dart';
 import 'package:safeleaf/widgets/splash/safeleaf_icon.dart';
+import 'package:safeleaf/widgets/common/language_toggle.dart';
 // import 'package:safeleaf/widgets/home/expiry_warning_section.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -72,31 +73,24 @@ class HomeView extends GetView<HomeController> {
         color: AppColors.primary,
         ),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SafeLeafIcon(size: 34),
             const SizedBox(width: 10),
             Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'SafeLeaf',
                   style: AppTextStyles.splashAppName.copyWith(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                     height: 1.0,
                     letterSpacing: 0.3,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  'Scan • Track • Stay Safe',
-                  style: AppTextStyles.splashTagline.copyWith(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white70,
-                    letterSpacing: 0.8,
                   ),
                 ),
               ],
@@ -107,32 +101,16 @@ class HomeView extends GetView<HomeController> {
           Obx(
             () => Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: IconButton(
-                onPressed: controller.toggleLanguage,
-                icon: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white24),
-                  ),
-                  child: Text(
-                    controller.isTelugu.value ? 'EN' : 'తె',
-                    style: AppTextStyles.splashTagline.copyWith(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
+              child: Center(
+              child: LanguageToggle(
+                isTelugu: controller.isTelugu.value,
+                onToggle: controller.toggleLanguage,
               ),
             ),
           ),
+         )
         ],
       ),
-
       body: RefreshIndicator(
         onRefresh: controller.refreshData,
         color: AppColors.accent,

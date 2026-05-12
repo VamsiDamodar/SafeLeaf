@@ -75,4 +75,10 @@ class AppTextStyles {
     color: AppColors.primaryDark,
     letterSpacing: 0.3,
   );
+  static const languageToggle = TextStyle(
+    fontFamily: 'Poppins',
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.1,
+  );
 }
