@@ -1,17 +1,18 @@
-// lib/features/home/view/home_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:safeleaf/modules/home/viewmodel/home_controller.dart';
+
 import 'package:safeleaf/utils/app_colors.dart';
 import 'package:safeleaf/utils/app_textstyles.dart';
+
+import 'package:safeleaf/widgets/common/language_toggle.dart';
 import 'package:safeleaf/widgets/home/category_card.dart';
+import 'package:safeleaf/widgets/home/category_list_tile.dart';
 import 'package:safeleaf/widgets/home/home_drawer.dart';
+import 'package:safeleaf/widgets/home/home_header.dart';
 import 'package:safeleaf/widgets/home/home_searchbar.dart';
 import 'package:safeleaf/widgets/splash/safeleaf_icon.dart';
-import 'package:safeleaf/widgets/common/language_toggle.dart';
-// import 'package:safeleaf/widgets/home/expiry_warning_section.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -21,7 +22,6 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       backgroundColor: AppColors.background,
       onDrawerChanged: controller.setDrawerOpen,
-
       drawer: Obx(
         () => HomeDrawer(
           isTelugu: controller.isTelugu.value,
@@ -35,7 +35,6 @@ class HomeView extends GetView<HomeController> {
           onAboutTap: controller.onAboutTap,
         ),
       ),
-
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: AppColors.primary,
@@ -70,7 +69,7 @@ class HomeView extends GetView<HomeController> {
         ),
         titleSpacing: 0,
         flexibleSpace: Container(
-        color: AppColors.primary,
+          color: AppColors.primary,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,22 +77,15 @@ class HomeView extends GetView<HomeController> {
           children: [
             const SafeLeafIcon(size: 34),
             const SizedBox(width: 10),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'SafeLeaf',
-                  style: AppTextStyles.splashAppName.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    height: 1.0,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ],
+            Text(
+              'SafeLeaf',
+              style: AppTextStyles.splashAppName.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                height: 1.0,
+                letterSpacing: 0.3,
+              ),
             ),
           ],
         ),
@@ -102,97 +94,128 @@ class HomeView extends GetView<HomeController> {
             () => Padding(
               padding: const EdgeInsets.only(right: 8),
               child: Center(
-              child: LanguageToggle(
-                isTelugu: controller.isTelugu.value,
-                onToggle: controller.toggleLanguage,
+                child: LanguageToggle(
+                  isTelugu: controller.isTelugu.value,
+                  onToggle: controller.toggleLanguage,
+                ),
               ),
             ),
           ),
-         )
         ],
       ),
       body: RefreshIndicator(
         onRefresh: controller.refreshData,
         color: AppColors.accent,
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: HomeSearchBar(
-                onChanged: (value) {
-                  controller.searchQuery.value = value;
-                },
+        child: Obx(() {
+          final cats = controller.filteredCategories;
+
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: HomeSearchBar(
+                  onChanged: (value) {
+                    controller.searchQuery.value = value;
+                  },
+                ),
               ),
-            ),
-            Obx(() {
-              if (controller.totalExpiringDocs > 0) {
-                // return SliverToBoxAdapter(
-                //   child: ExpiryWarningSection(count: controller.totalExpiringDocs),
-                // );
-              }
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }),
 
-            Obx(() {
-              final cats = controller.filteredCategories;
+              /// Header row
+              SliverToBoxAdapter(
+                child: HomeCategoryHeader(
+                  isTelugu: controller.isTelugu.value,
+                  categoryCount: cats.length,
+                  isGridView: controller.isGridView.value,
+                  onAddCategoryTap: controller.showAddCategoryDialog,
+                  onToggleViewTap: controller.toggleViewMode,
+                ),
+              ),
 
-              if (cats.isEmpty) {
-                return SliverFillRemaining(
+              if (cats.isEmpty)
+                SliverFillRemaining(
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                      Image.asset(
-                        'assets/notfound.png',
-                        height: 180,
-                        fit: BoxFit.contain,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      Text(
-                        'No categories found',
-                        style: AppTextStyles.splashTagline.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryDark.withOpacity(0.6),
-                          letterSpacing: 0.3,
+                        Image.asset(
+                          'assets/notfound.png',
+                          height: 180,
+                          fit: BoxFit.contain,
                         ),
-                      ),
-                    ]
+                        const SizedBox(height: 20),
+                        Text(
+                          controller.isTelugu.value
+                              ? 'కేటగిరీలు కనపడలేదు'
+                              : 'No categories found',
+                          style: AppTextStyles.splashTagline.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryDark.withOpacity(0.6),
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }
+                )
+              else if (controller.isGridView.value)
+                SliverPadding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  sliver: SliverGrid(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.1,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final category = cats[index];
 
-              return SliverPadding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                        return CategoryCard(
+                          category: category,
+                          isTelugu: controller.isTelugu.value,
+                          onTap: () => controller.openCategory(category),
+                          onRename: () => controller.renameCategory(category),
+                          onDelete: () => controller.deleteCategory(category),
+                        );
+                      },
+                      childCount: cats.length,
+                    ),
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return CategoryCard(
-                        category: cats[index],
-                        isTelugu: controller.isTelugu.value,
-                        onTap: () => controller.openCategory(cats[index]),
-                      );
-                    },
-                    childCount: cats.length,
+                )
+              else
+                SliverPadding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final category = cats[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: CategoryListTile(
+                            category: category,
+                            isTelugu: controller.isTelugu.value,
+                            onTap: () => controller.openCategory(category),
+                            onRename: () => controller.renameCategory(category),
+                            onDelete: () => controller.deleteCategory(category),
+                          ),
+                        );
+                      },
+                      childCount: cats.length,
+                    ),
                   ),
                 ),
-              );
-            }),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 80)),
-          ],
-        ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 80),
+              ),
+            ],
+          );
+        }),
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         onPressed: controller.addDocument,
         backgroundColor: AppColors.accent,
