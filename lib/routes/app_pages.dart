@@ -9,6 +9,8 @@ import 'package:safeleaf/modules/home/binding/home_binding.dart';
 import 'package:safeleaf/modules/home/view/home_view.dart';
 import 'package:safeleaf/modules/splash/view/splash_view.dart';
 import 'package:safeleaf/modules/splash/binding/splash_binding.dart';
+import 'package:safeleaf/modules/upload_document/upload_document_binding.dart';
+import 'package:safeleaf/modules/upload_document/upload_document_view.dart';
 import 'package:safeleaf/routes/app_routes.dart';
 
 class AppPages {
@@ -39,6 +41,11 @@ class AppPages {
       name: Routes.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: '/upload-document',
+      page: () => const UploadDocumentView(),
+      binding: UploadDocumentBinding(),
     ),
   ];
 }

@@ -35,6 +35,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/notfound.png
+    - assets/upload_doc_image.png
   fonts:
     - family: Poppins
       fonts:

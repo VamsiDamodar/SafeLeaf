@@ -142,12 +142,12 @@ class HomeController extends GetxController {
   }
 
   void addDocument() {
-    Get.toNamed('/add-document');
+    Get.toNamed('/upload-document');
   }
 
   void toggleLanguage() {
     isTelugu.value = !isTelugu.value;
-  }
+  } 
 
   void toggleViewMode() {
     isGridView.value = !isGridView.value;
