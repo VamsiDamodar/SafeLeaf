@@ -14,7 +14,7 @@ class AppDatabase {
     _database = await _initDB();
     return _database!;
   }
-
+  // -----------Database initiliazation ------------
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'safeleaf.db');
@@ -25,7 +25,7 @@ class AppDatabase {
       onCreate: _createDB,
     );
   }
-
+  // ----------------- Table Creation code On DB---------------
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE categories (
@@ -65,7 +65,7 @@ class AppDatabase {
     );
     return maps.map(CategoryModel.fromMap).toList();
   }
-
+  // ---------------- Adding the Record on DB ------------
   Future<void> insertCategory(CategoryModel category) async {
     final db = await database;
     await db.insert(
@@ -74,7 +74,7 @@ class AppDatabase {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
+  // ---------------- Adding the records on DB ------------
   Future<void> insertCategories(List<CategoryModel> categories) async {
     final db = await database;
     final batch = db.batch();
@@ -89,7 +89,7 @@ class AppDatabase {
 
     await batch.commit(noResult: true);
   }
-
+  // ---------------- Update the records on DB ------------
   Future<void> updateCategory(CategoryModel category) async {
     final db = await database;
     await db.update(
@@ -99,7 +99,7 @@ class AppDatabase {
       whereArgs: [category.id],
     );
   }
-
+  // ---------------- Delete the records on DB ------------
   Future<void> deleteCategory(String id) async {
     final db = await database;
     await db.delete(
@@ -108,15 +108,14 @@ class AppDatabase {
       whereArgs: [id],
     );
   }
-
+  // ---------------- Getting the count of each category ------------
   Future<int> getCategoryCount() async {
     final db = await database;
     final result = await db.rawQuery('SELECT COUNT(*) as count FROM categories');
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
-  // ---------------- DOCUMENT METHODS ----------------
-
+  // ----------------Adding  Documents ----------------
   Future<void> insertDocument(DocumentModel document) async {
     final db = await database;
     await db.insert(
@@ -125,7 +124,7 @@ class AppDatabase {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
+  // ----------------Update  Documents ----------------
   Future<void> updateDocument(DocumentModel document) async {
     final db = await database;
     await db.update(
@@ -135,7 +134,7 @@ class AppDatabase {
       whereArgs: [document.id],
     );
   }
-
+  // ---------------- Delete  Documents ----------------
   Future<void> deleteDocument(String id) async {
     final db = await database;
     await db.delete(
@@ -144,7 +143,7 @@ class AppDatabase {
       whereArgs: [id],
     );
   }
-
+  // ----------------Fetching Documents by categoreis ----------------
   Future<List<DocumentModel>> getDocumentsByCategory(String categoryId) async {
     final db = await database;
     final maps = await db.query(
@@ -155,7 +154,7 @@ class AppDatabase {
     );
     return maps.map(DocumentModel.fromMap).toList();
   }
-
+  // ----------------If the user want to delte the document safely moving the delete doc to other ----------------
   Future<void> moveDocumentsToOtherCategory(String oldCategoryId) async {
     final db = await database;
     await db.update(
@@ -164,8 +163,8 @@ class AppDatabase {
       where: 'category_id = ?',
       whereArgs: [oldCategoryId],
     );
-  }
-
+  } 
+  // ----------------Fetching Documents Count by categories ----------------
   Future<int> getDocumentCountByCategory(String categoryId) async {
     final db = await database;
     final result = await db.rawQuery(
