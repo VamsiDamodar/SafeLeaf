@@ -46,8 +46,8 @@ class AppPages {
       name: '/upload-document',
       page: () => const UploadDocumentView(),
       binding: UploadDocumentBinding(),
-      transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 900),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 200),
     ),
   ];
 }
