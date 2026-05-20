@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safeleaf/data/database/app_database.dart';
 import 'package:safeleaf/data/models/home_category_model.dart';
+import 'package:safeleaf/modules/documents/document_binding.dart';
+import 'package:safeleaf/modules/documents/document_view.dart';
 import 'package:safeleaf/widgets/home/delete_category_dialog.dart';
 import 'package:safeleaf/widgets/home/rename_category_dialog.dart';
 
@@ -138,7 +140,16 @@ class HomeController extends GetxController {
   }
 
   void openCategory(CategoryModel category) {
-    Get.toNamed('/documents', arguments: category);
+    Get.to(
+      () => DocumentView(
+        category: category,
+      ),
+      binding: DocumentBinding(),
+      transition: Transition.rightToLeft,
+      duration: const Duration(
+        milliseconds: 200,
+      ),
+    );
   }
 
   void addDocument() {
