@@ -7,6 +7,8 @@ import 'package:safeleaf/modules/auth/view/pin_lock_view.dart';
 import 'package:safeleaf/modules/auth/view/pin_setup_view.dart';
 import 'package:safeleaf/modules/home/binding/home_binding.dart';
 import 'package:safeleaf/modules/home/view/home_view.dart';
+import 'package:safeleaf/modules/preview/preview_document_binding.dart';
+import 'package:safeleaf/modules/preview/preview_document_view.dart';
 import 'package:safeleaf/modules/splash/view/splash_view.dart';
 import 'package:safeleaf/modules/splash/binding/splash_binding.dart';
 import 'package:safeleaf/modules/upload_document/upload_document_binding.dart';
@@ -43,10 +45,17 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: '/upload-document',
+      name: Routes.UPLOAD_DOCUMENT,
       page: () => const UploadDocumentView(),
       binding: UploadDocumentBinding(),
       transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: Routes.PREVIEW_DOCUMENT,
+      page: () => const PreviewDocumentView(),
+      binding: PreviewDocumentBinding(),
+      transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 200),
     ),
   ];
