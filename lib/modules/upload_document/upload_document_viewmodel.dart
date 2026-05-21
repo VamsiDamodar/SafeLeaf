@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:safeleaf/routes/app_routes.dart';
 
 class UploadDocumentViewModel extends GetxController {
   // Multiple selected files ikkada store avuthayi
@@ -8,6 +9,9 @@ class UploadDocumentViewModel extends GetxController {
 
   // UI lo multiple file names chupinchadaniki
   final selectedFileNames = <String>[].obs;
+
+  final selectedFileSizes = <int>[].obs;
+  final selectedFileExtensions = <String>[].obs;
 
   void onBackTap() {
     Get.back();
@@ -69,6 +73,8 @@ class UploadDocumentViewModel extends GetxController {
 
       selectedFiles.clear();
       selectedFileNames.clear();
+      selectedFileSizes.clear();
+      selectedFileExtensions.clear();
 
       // Multiple images case
       if (imageFiles.isNotEmpty) {
@@ -77,12 +83,11 @@ class UploadDocumentViewModel extends GetxController {
 
           selectedFiles.add(File(image.path!));
           selectedFileNames.add(image.name);
+          selectedFileSizes.add(image.size);
+          selectedFileExtensions.add(image.extension?.toLowerCase() ?? 'image');
         }
 
-        Get.snackbar(
-          'Images selected',
-          '${selectedFiles.length} images selected',
-        );
+        _openPreview();
 
         return;
       }
@@ -95,11 +100,10 @@ class UploadDocumentViewModel extends GetxController {
 
         selectedFiles.add(File(document.path!));
         selectedFileNames.add(document.name);
+        selectedFileSizes.add(document.size);
+        selectedFileExtensions.add(document.extension?.toLowerCase() ?? 'file');
 
-        Get.snackbar(
-          'Document selected',
-          document.name,
-        );
+        _openPreview();
 
         return;
       }
@@ -120,5 +124,17 @@ class UploadDocumentViewModel extends GetxController {
 
   void onScanDocumentTap() {
     // TODO: scan document screen ki navigate cheyyali
+  }
+
+  void _openPreview() {
+    Get.toNamed(
+      Routes.PREVIEW_DOCUMENT,
+      arguments: {
+        'files': selectedFiles.toList(),
+        'fileNames': selectedFileNames.toList(),
+        'fileSizes': selectedFileSizes.toList(),
+        'extensions': selectedFileExtensions.toList(),
+      },
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:safeleaf/modules/upload_document/upload_document_viewmodel.dart';
 import 'package:safeleaf/utils/app_colors.dart';
 import 'package:safeleaf/utils/app_textstyles.dart';
+import 'package:safeleaf/widgets/common/safeleaf_page_app_bar.dart';
 
 class UploadDocumentView extends GetView<UploadDocumentViewModel> {
   const UploadDocumentView({super.key});
@@ -21,32 +22,11 @@ class UploadDocumentView extends GetView<UploadDocumentViewModel> {
         final buttonHeight = screenHeight * 0.068;
         final buttonFontSize = screenWidth * 0.039;
         final iconSize = screenWidth * 0.052;
-        final appBarTitleSize = screenWidth * 0.043;
         return Scaffold(
           backgroundColor: AppColors.surface,
-          appBar: AppBar(
-            backgroundColor: AppColors.surface,
-            elevation: 0,
-            centerTitle: true,
-            leading: IconButton(
-              onPressed: controller.onBackTap,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: AppColors.primaryDark,
-                size: screenWidth * 0.075,
-              ),
-            ),
-            title: Text(
-              'Upload Document',
-              style: AppTextStyles.drawerItem.copyWith(
-                color: AppColors.primaryDark,
-                fontWeight: FontWeight.w600,
-                fontSize: appBarTitleSize,
-              ),
-            ),
-            actions: [
-              SizedBox(width: screenWidth * 0.12),
-            ],
+          appBar: SafeLeafPageAppBar(
+            title: 'Upload Document',
+            onBackTap: controller.onBackTap,
           ),
           body: SafeArea(
             child: Padding(
