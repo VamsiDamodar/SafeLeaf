@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:safeleaf/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class PreviewDocumentViewModel extends GetxController {
@@ -64,10 +64,24 @@ class PreviewDocumentViewModel extends GetxController {
   }
 
   void onNextTap() {
-    Get.snackbar(
-      'Next step',
-      'Enhance document screen comes next.',
-    );
+    final args = {
+      'files': files.toList(),
+      'fileNames': fileNames.toList(),
+      'fileSizes': fileSizes.toList(),
+      'extensions': extensions.toList(),
+    };
+
+    if (isImageExtension(extension)) {
+      Get.toNamed(Routes.ARRANGE_IMAGES, arguments: args);
+      return;
+    }
+
+    if (extension == 'pdf' || extension == 'doc' || extension == 'docx') {
+      Get.toNamed(Routes.ENHANCE_DOCUMENT, arguments: args);
+      return;
+    }
+
+    Get.toNamed(Routes.DOCUMENT_DETAILS, arguments: args);
   }
 
   int? _readPdfPageCount(File file) {
