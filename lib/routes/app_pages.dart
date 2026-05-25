@@ -1,10 +1,16 @@
 import 'package:get/get.dart';
+import 'package:safeleaf/modules/arrange_images/arrange_images_binding.dart';
+import 'package:safeleaf/modules/arrange_images/arrange_images_view.dart';
 import 'package:safeleaf/modules/auth/binding/biometric_binding.dart';
 import 'package:safeleaf/modules/auth/binding/pin_lock_binding.dart';
 import 'package:safeleaf/modules/auth/binding/pin_setup_binding.dart';
 import 'package:safeleaf/modules/auth/view/biometric_view.dart';
 import 'package:safeleaf/modules/auth/view/pin_lock_view.dart';
 import 'package:safeleaf/modules/auth/view/pin_setup_view.dart';
+import 'package:safeleaf/modules/document_details/document_details_binding.dart';
+import 'package:safeleaf/modules/document_details/document_details_view.dart';
+import 'package:safeleaf/modules/enhance_document/enhance_document_binding.dart';
+import 'package:safeleaf/modules/enhance_document/enhance_document_view.dart';
 import 'package:safeleaf/modules/home/binding/home_binding.dart';
 import 'package:safeleaf/modules/home/view/home_view.dart';
 import 'package:safeleaf/modules/preview/preview_document_binding.dart';
@@ -55,6 +61,29 @@ class AppPages {
       name: Routes.PREVIEW_DOCUMENT,
       page: () => const PreviewDocumentView(),
       binding: PreviewDocumentBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: Routes.ENHANCE_DOCUMENT,
+      page: () => const EnhanceDocumentView(),
+      binding: EnhanceDocumentBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+
+    GetPage(
+      name: Routes.ARRANGE_IMAGES,
+      page: () => const ArrangeImagesView(),
+      binding: ArrangeImagesBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+
+    GetPage(
+      name: Routes.DOCUMENT_DETAILS,
+      page: () => const DocumentDetailsView(),
+      binding: DocumentDetailsBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 200),
     ),

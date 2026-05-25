@@ -8,5 +8,8 @@ abstract class Routes {
   static const HOME = '/home';
   static const UPLOAD_DOCUMENT = '/upload-document';
   static const PREVIEW_DOCUMENT = '/preview-document';
+  static const ENHANCE_DOCUMENT = '/enhance-document';
+  static const ARRANGE_IMAGES = '/arrange-images';
+  static const DOCUMENT_DETAILS = '/document-details';
 
 }
