@@ -30,20 +30,33 @@ class ArrangeImagesViewModel extends GetxController {
   }
 
   // Drag and drop ayyaka image order update cheyyadaniki.
+ // Drag and drop ayyaka only touched two document positions swap cheyyadaniki.
+// Example: [A, B, C, D] lo A ni D meeda drop chesthe [D, B, C, A] avuthundi.
+// removeAt + insert use cheyyam, because adi middle documents ni shift chesthundi.
   void moveImage(int oldIndex, int newIndex) {
     if (oldIndex == newIndex) return;
     if (oldIndex < 0 || oldIndex >= files.length) return;
     if (newIndex < 0 || newIndex >= files.length) return;
 
-    final movedFile = files.removeAt(oldIndex);
-    final movedName = fileNames.removeAt(oldIndex);
-    final movedSize = fileSizes.removeAt(oldIndex);
-    final movedExtension = extensions.removeAt(oldIndex);
+    final tempFile = files[oldIndex];
+    final tempName = fileNames[oldIndex];
+    final tempSize = fileSizes[oldIndex];
+    final tempExtension = extensions[oldIndex];
 
-    files.insert(newIndex, movedFile);
-    fileNames.insert(newIndex, movedName);
-    fileSizes.insert(newIndex, movedSize);
-    extensions.insert(newIndex, movedExtension);
+    files[oldIndex] = files[newIndex];
+    fileNames[oldIndex] = fileNames[newIndex];
+    fileSizes[oldIndex] = fileSizes[newIndex];
+    extensions[oldIndex] = extensions[newIndex];
+
+    files[newIndex] = tempFile;
+    fileNames[newIndex] = tempName;
+    fileSizes[newIndex] = tempSize;
+    extensions[newIndex] = tempExtension;
+
+    files.refresh();
+    fileNames.refresh();
+    fileSizes.refresh();
+    extensions.refresh();
   }
 
   String getFileName(int index) {
@@ -70,7 +83,7 @@ class ArrangeImagesViewModel extends GetxController {
 
   void onNextTap() {
     Get.toNamed(
-      Routes.DOCUMENT_DETAILS,
+      Routes.ENHANCE_DOCUMENT,
       arguments: {
         'files': files.toList(),
         'fileNames': fileNames.toList(),
