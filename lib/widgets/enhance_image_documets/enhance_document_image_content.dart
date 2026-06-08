@@ -117,13 +117,16 @@ class EnhanceDocumentContent extends StatelessWidget {
                     onNextTap: onNextImageTap,
                   ),
                 ],
-                SizedBox(height: gap * 1.3),
-                EnhanceEditTools(
-                  onRotateTap: onRotateTap,
-                  onCropTap: onCropTap,
-                  onDeleteTap: onDeleteTap,
-                ),
-                SizedBox(height: gap * 1.4),
+                SizedBox(height: isPdf ? gap * 5 : gap * 1.3),
+                if (!isPdf) ...[
+                  EnhanceEditTools(
+                    onRotateTap: onRotateTap,
+                    onCropTap: onCropTap,
+                    onDeleteTap: onDeleteTap,
+                  ),
+                  SizedBox(height: gap * 1.4),
+                ] else
+                  SizedBox(height: gap * .4),
                 EnhanceFilterStrip(
                   file: files[currentIndex],
                   extension: extension,
