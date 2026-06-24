@@ -80,7 +80,15 @@ class _EnhanceImagePreviewState extends State<EnhanceImagePreview> {
           colorFilter: _filterForIndex(widget.selectedFilterIndex),
           child: widget.extension == 'pdf'
               ? _buildPdfPreview()
-              : Image.file(widget.file, fit: BoxFit.cover),
+              : Padding(
+                padding: const EdgeInsets.all(10),
+                child: Image.file(
+                  widget.file,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
         ),
       ),
     );

@@ -18,47 +18,56 @@ class DocumentView extends GetView<DocumentController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.loadDocuments(category.id);
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: const SafeLeafAppBar(),
       body: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            DocumentHeader(category: category),
+        child: FutureBuilder<void>(
+          future: controller.loadDocuments(category.id),
+          builder: (context, snapshot) {
+            return Column(
+              children: [
+                DocumentHeader(category: category),
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      );
+                    }
 
-            Expanded(
-              child: Obx(() {
-                if (controller.filteredDocuments.isEmpty) {
-                  return Center(
-                    child: Image.asset(
-                      'assets/noducmentsyet.png',
-                      height: 400,
-                      width: 400,
-                      fit: BoxFit.contain,
-                    ),
-                  );
-                }
+                    if (controller.filteredDocuments.isEmpty) {
+                      return Center(
+                        child: Image.asset(
+                          'assets/noducmentsyet.png',
+                          height: 400,
+                          width: 400,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    }
 
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: controller.filteredDocuments.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemBuilder: (_, index) {
-                    final item = controller.filteredDocuments[index];
-                    return DocumentCard(document: item);
-                  },
-                );
-              }),
-            ),
-
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: DocumentSecureBanner(),
-            ),
-          ],
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: controller.filteredDocuments.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
+                      itemBuilder: (_, index) {
+                        final item = controller.filteredDocuments[index];
+                        return DocumentCard(document: item);
+                      },
+                    );
+                  }),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: DocumentSecureBanner(),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

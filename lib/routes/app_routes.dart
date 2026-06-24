@@ -7,6 +7,7 @@ abstract class Routes {
   static const PIN_LOCK = '/pin-lock';
   static const HOME = '/home';
   static const UPLOAD_DOCUMENT = '/upload-document';
+  static const SAVING = '/saving';
   static const PREVIEW_DOCUMENT = '/preview-document';
   static const ENHANCE_DOCUMENT = '/enhance-document';
   static const ARRANGE_IMAGES = '/arrange-images';
