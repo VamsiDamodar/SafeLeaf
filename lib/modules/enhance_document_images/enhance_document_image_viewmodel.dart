@@ -169,7 +169,7 @@ class EnhanceDocumentViewModel extends GetxController {
 
   void onContinueTap() {
     Get.toNamed(
-      Routes.DOCUMENT_DETAILS,
+      Routes.SAVING,
       arguments: {
         'files': files.toList(),
         'fileNames': fileNames.toList(),

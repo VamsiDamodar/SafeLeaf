@@ -1,3 +1,5 @@
+import 'package:safeleaf/data/database/app_database.dart';
+import 'package:safeleaf/data/models/home_category_model.dart';
 import 'package:get/get.dart';
 import 'package:safeleaf/data/models/document_model.dart';
 
@@ -6,33 +8,30 @@ class DocumentController extends GetxController {
   final filteredDocuments = <DocumentModel>[].obs;
   final isLoading = false.obs;
   final search = ''.obs;
-  final allDocuments = <DocumentModel>[
-    const DocumentModel(
-      id: 'dummy_aadhaar_back',
-      title: 'Aadhaar Card Back',
-      categoryId: 'aadhaar',
-      filePath: null,
-      documentNumber: 'XXXX-XXXX-1234',
-      issueDate: '2025-05-12',
-      expiryDate: null,
-      notes: 'ID Proof',
-      createdAt: '2025-05-12',
-      updatedAt: '2025-05-12',
-    ),
-  ];
+  final _db = AppDatabase.instance;
+  String? _loadedCategoryId;
 
   /// Loads documents by category and updates both [documents] and [filteredDocuments].
-  void loadDocuments(String categoryId) {
+  Future<void> loadDocuments(String categoryId) async {
+    if (_loadedCategoryId == categoryId && documents.isNotEmpty) {
+      return;
+    }
+
     isLoading.value = true;
+    _loadedCategoryId = categoryId;
 
-    final result = allDocuments
-        .where((doc) => doc.categoryId == categoryId)
-        .toList();
+    try {
+      final result = await _db.getDocumentsByCategory(categoryId);
+      documents.assignAll(result);
+      filteredDocuments.assignAll(result);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-    documents.assignAll(result);
-    filteredDocuments.assignAll(result);
-
-    isLoading.value = false;
+  Future<void> reloadDocuments(CategoryModel category) async {
+    _loadedCategoryId = null;
+    await loadDocuments(category.id);
   }
 
   /// Filters documents based on the search [query].

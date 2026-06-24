@@ -99,6 +99,21 @@ class AppDatabase {
       whereArgs: [category.id],
     );
   }
+
+  Future<void> updateCategoryDocumentCount(
+    String categoryId,
+    int documentCount,
+  ) async {
+    final db = await database;
+    await db.rawUpdate(
+      '''
+      UPDATE categories
+      SET document_count = ?
+      WHERE id = ?
+      ''',
+      [documentCount, categoryId],
+    );
+  }
   // ---------------- Delete the records on DB ------------
   Future<void> deleteCategory(String id) async {
     final db = await database;
