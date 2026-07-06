@@ -24,18 +24,18 @@ class SavingActionButtons extends StatelessWidget {
           child: OutlinedButton(
             onPressed: onBackTap,
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 18),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               side: const BorderSide(color: AppColors.primary, width: 1.2),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
             child: Text(
               'Back',
               style: AppTextStyles.drawerItem.copyWith(
                 color: AppColors.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -68,11 +68,11 @@ class SavingActionButtons extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    continueEnabled ? 'Continue' : 'Continue',
+                    'Continue',
                     style: AppTextStyles.drawerItem.copyWith(
                       color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
           ),

@@ -15,8 +15,12 @@ import 'package:safeleaf/modules/home/binding/home_binding.dart';
 import 'package:safeleaf/modules/home/view/home_view.dart';
 import 'package:safeleaf/modules/preview/preview_document_binding.dart';
 import 'package:safeleaf/modules/preview/preview_document_view.dart';
+import 'package:safeleaf/modules/saving/save_success_binding.dart';
+import 'package:safeleaf/modules/saving/save_success_view.dart';
 import 'package:safeleaf/modules/saving/saving_binding.dart';
 import 'package:safeleaf/modules/saving/saving_view.dart';
+import 'package:safeleaf/modules/saved_document/saved_document_binding.dart';
+import 'package:safeleaf/modules/saved_document/saved_document_view.dart';
 import 'package:safeleaf/modules/splash/view/splash_view.dart';
 import 'package:safeleaf/modules/splash/binding/splash_binding.dart';
 import 'package:safeleaf/modules/upload_document/upload_document_binding.dart';
@@ -63,6 +67,20 @@ class AppPages {
       name: Routes.SAVING,
       page: () => const SavingView(),
       binding: SavingBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: Routes.SAVING_SUCCESS,
+      page: () => const SaveSuccessView(),
+      binding: SaveSuccessBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: Routes.SAVED_DOCUMENT,
+      page: () => const SavedDocumentView(),
+      binding: SavedDocumentBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 200),
     ),

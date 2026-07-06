@@ -7,6 +7,7 @@ import 'package:safeleaf/data/database/app_database.dart';
 import 'package:safeleaf/data/models/document_model.dart';
 import 'package:safeleaf/data/models/home_category_model.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safeleaf/routes/app_routes.dart';
 
 class SavingViewModel extends GetxController {
   final files = <File>[].obs;
@@ -198,12 +199,12 @@ class SavingViewModel extends GetxController {
       );
 
       debugPrint('[Saving] save complete');
-      Get.snackbar(
-        'Saved',
-        'Document saved successfully.',
-        snackPosition: SnackPosition.BOTTOM,
+      Get.toNamed(
+        Routes.SAVING_SUCCESS,
+        arguments: {
+          'fileName': primaryFileName,
+        },
       );
-      Get.back();
     } catch (e) {
       debugPrint('[Saving] save failed: $e');
       Get.snackbar(

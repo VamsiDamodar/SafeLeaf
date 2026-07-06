@@ -1,5 +1,6 @@
 import 'package:safeleaf/data/database/app_database.dart';
 import 'package:safeleaf/data/models/home_category_model.dart';
+import 'package:safeleaf/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:safeleaf/data/models/document_model.dart';
 
@@ -32,6 +33,13 @@ class DocumentController extends GetxController {
   Future<void> reloadDocuments(CategoryModel category) async {
     _loadedCategoryId = null;
     await loadDocuments(category.id);
+  }
+
+  Future<void> openDocument(DocumentModel document) async {
+    await Get.toNamed(
+      Routes.DOCUMENT_DETAILS,
+      arguments: {'document': document},
+    );
   }
 
   /// Filters documents based on the search [query].

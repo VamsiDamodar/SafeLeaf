@@ -56,7 +56,13 @@ class DocumentView extends GetView<DocumentController> {
                       separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (_, index) {
                         final item = controller.filteredDocuments[index];
-                        return DocumentCard(document: item);
+                        return DocumentCard(
+                          document: item,
+                          onTap: () async {
+                            await controller.openDocument(item);
+                            await controller.reloadDocuments(category);
+                          },
+                        );
                       },
                     );
                   }),
