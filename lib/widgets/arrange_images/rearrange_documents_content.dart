@@ -49,11 +49,11 @@ class RearrangeDocumentsContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    RearrangeInfoBanner(
-                      icon: Icons.security_rounded,
-                      title: '$imageCount Images Selected',
-                      subtitle: 'Tap and hold to reorder',
-                    ),
+                    // RearrangeInfoBanner(
+                    //   icon: Icons.security_rounded,
+                    //   title: '$imageCount Images Selected',
+                    //   subtitle: 'Tap and hold to reorder',
+                    // ),
                     SizedBox(height: gap * 1.5),
                     ImageReorderGrid(
                       files: files,

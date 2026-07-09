@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:printing/printing.dart';
 import 'package:safeleaf/data/models/document_model.dart';
 import 'package:safeleaf/utils/app_colors.dart';
 import 'package:safeleaf/utils/app_textstyles.dart';
@@ -155,6 +157,7 @@ class _DocumentPreview extends StatelessWidget {
     final hasFile = path != null && path!.trim().isNotEmpty;
     final file = hasFile ? File(path!) : null;
     final isImage = hasFile && _isImage(path!);
+    final isPdf = hasFile && _isPdf(path!);
 
     return Container(
       width: 92,
@@ -167,19 +170,46 @@ class _DocumentPreview extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: isImage && file!.existsSync()
-            ? Image.file(
-                file,
-                fit: BoxFit.cover,
-              )
-            : Container(
-                color: Colors.white,
-                child: const Icon(
-                  Icons.picture_as_pdf_rounded,
-                  color: AppColors.primary,
-                  size: 34,
-                ),
-              ),
+        child: _buildPreview(file, isImage, isPdf),
+      ),
+    );
+  }
+
+  Widget _buildPreview(File? file, bool isImage, bool isPdf) {
+    if (isImage && file != null && file.existsSync()) {
+      return Image.file(
+        file,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (isPdf && file != null && file.existsSync()) {
+      return FutureBuilder<Uint8List?>(
+        future: _renderPdfFirstPage(file),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            return Image.memory(
+              snapshot.data!,
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+            );
+          }
+
+          return _buildPdfFallback();
+        },
+      );
+    }
+
+    return _buildPdfFallback();
+  }
+
+  Widget _buildPdfFallback() {
+    return Container(
+      color: Colors.white,
+      child: const Icon(
+        Icons.picture_as_pdf_rounded,
+        color: AppColors.primary,
+        size: 34,
       ),
     );
   }
@@ -190,6 +220,21 @@ class _DocumentPreview extends StatelessWidget {
         lower.endsWith('.jpg') ||
         lower.endsWith('.jpeg') ||
         lower.endsWith('.webp');
+  }
+
+  bool _isPdf(String path) {
+    return path.toLowerCase().endsWith('.pdf');
+  }
+
+  Future<Uint8List?> _renderPdfFirstPage(File file) async {
+    try {
+      final bytes = await file.readAsBytes();
+      final pages = await Printing.raster(bytes, pages: const [0], dpi: 120).toList();
+      if (pages.isEmpty) return null;
+      return pages.first.toPng();
+    } catch (_) {
+      return null;
+    }
   }
 }
 

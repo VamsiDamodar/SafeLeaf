@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:path/path.dart' as p;
 import 'package:safeleaf/data/database/app_database.dart';
 import 'package:safeleaf/data/models/document_model.dart';
@@ -99,7 +100,10 @@ class SavingViewModel extends GetxController {
       fileNameController.text = fallbackName;
     }
 
-    if (extensions.isNotEmpty) {
+    if(files.length > 1 && files.every((file) => _isImageFile(file.path))) {
+      selectedExtension.value = 'PDF';
+      extensionOptions.assignAll(['PDF']);
+    } else if (extensions.isNotEmpty) {
       selectedExtension.value = extensions.first.toUpperCase();
     } else if (files.isNotEmpty) {
       selectedExtension.value = _guessExtension(files.first.path);
@@ -176,8 +180,8 @@ class SavingViewModel extends GetxController {
     isSaving.value = true;
     try {
       debugPrint('[Saving] starting local save');
-      final savedPath = await _saveFileToLocalStorage(
-        sourceFile: sourceFile,
+      final savedPath = await _saveSelectionToLocalStorage(
+        sourceFiles: files.toList(),
         categoryId: category.id,
         fileNameValue: primaryFileName,
         extensionValue: primaryExtension,
@@ -269,6 +273,83 @@ class SavingViewModel extends GetxController {
     debugPrint('[Saving] target path=$targetPath');
 
     return sourceFile.copy(targetPath).then((file) => file.path);
+  }
+
+  Future<String> _saveSelectionToLocalStorage({
+    required List<File> sourceFiles,
+    required String categoryId,
+    required String fileNameValue,
+    required String extensionValue,
+  }) async {
+        if (_isMultipleImageSelection(sourceFiles)) {
+      return _saveImagesAsPdf(
+        sourceFiles: sourceFiles,
+        categoryId: categoryId,
+        fileNameValue: fileNameValue,
+      );
+    }
+
+    final sourceFile = sourceFiles.first;
+    return _saveFileToLocalStorage(
+      sourceFile: sourceFile,
+      categoryId: categoryId,
+      fileNameValue: fileNameValue,
+      extensionValue: extensionValue,
+    );
+  }
+
+  bool _isMultipleImageSelection(List<File> sourceFiles) {
+    if (sourceFiles.length <= 1) return false;
+    return sourceFiles.every((file) => _isImageFile(file.path));
+  }
+
+  bool _isImageFile(String path) {
+    final lower = path.toLowerCase();
+    return lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.png') ||
+        lower.endsWith('.webp');
+  }
+
+  Future<String> _saveImagesAsPdf({
+    required List<File> sourceFiles,
+    required String categoryId,
+    required String fileNameValue,
+  }) async {
+    debugPrint('[Saving] converting ${sourceFiles.length} images to PDF');
+    final directory = await getApplicationDocumentsDirectory();
+    final safeName = _sanitizeFileName(fileNameValue);
+    final targetDirectory = Directory(
+      p.join(directory.path, 'documents', categoryId),
+    );
+
+    await targetDirectory.create(recursive: true);
+
+    final targetPath = p.join(targetDirectory.path, '$safeName.pdf');
+    final pdf = pw.Document();
+
+    for (final file in sourceFiles) {
+      final bytes = await file.readAsBytes();
+      final image = pw.MemoryImage(bytes);
+
+      pdf.addPage(
+        pw.Page(
+          margin: pw.EdgeInsets.zero,
+          build: (context) {
+            return pw.Center(
+              child: pw.Image(
+                image,
+                fit: pw.BoxFit.contain,
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    final pdfBytes = await pdf.save();
+    await File(targetPath).writeAsBytes(pdfBytes, flush: true);
+    return targetPath;
   }
 
   Future<void> _saveDocumentRecord({

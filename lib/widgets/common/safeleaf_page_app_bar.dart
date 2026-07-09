@@ -22,6 +22,7 @@ class SafeLeafPageAppBar extends StatelessWidget implements PreferredSizeWidget 
     final iconSize = (screenWidth * 0.075).clamp(26.0, 32.0).toDouble();
 
     return AppBar(
+      scrolledUnderElevation: 0,
       backgroundColor: AppColors.surface,
       elevation: 0,
       centerTitle: true,

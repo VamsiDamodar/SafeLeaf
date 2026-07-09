@@ -23,7 +23,7 @@ class RearrangeImageCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        
         border: Border.all(color: AppColors.cardBorder),
         boxShadow: [
           BoxShadow(
@@ -41,8 +41,8 @@ class RearrangeImageCard extends StatelessWidget {
             children: [
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final imageHeight = (constraints.maxWidth * 0.78)
-                      .clamp(60.0, 145.0)
+                  final imageHeight = (constraints.maxWidth * 1)
+                      .clamp(120.0, 250.0)
                       .toDouble();
 
                   return Container(
@@ -51,24 +51,10 @@ class RearrangeImageCard extends StatelessWidget {
                     padding: const EdgeInsets.all(6),
                     color: AppColors.cardBackground,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
                       child: Image.file(file, fit: BoxFit.cover),
                     ),
                   );
                 },
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.drawerItem.copyWith(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 1, 10, 10),

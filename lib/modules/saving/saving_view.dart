@@ -7,7 +7,7 @@ import 'package:safeleaf/widgets/saving/saving_action_buttons.dart';
 import 'package:safeleaf/widgets/saving/saving_category_dropdown.dart';
 import 'package:safeleaf/widgets/saving/saving_extension_dropdown.dart';
 import 'package:safeleaf/widgets/saving/saving_file_name_field.dart';
-import 'package:safeleaf/widgets/saving/saving_selected_file_preview.dart';
+//import 'package:safeleaf/widgets/saving/saving_selected_file_preview.dart';
 
 class SavingView extends GetView<SavingViewModel> {
   const SavingView({super.key});
@@ -38,14 +38,6 @@ class SavingView extends GetView<SavingViewModel> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Obx(
-                    () => SavingSelectedFilePreview(
-                      fileName: controller.primaryFileName,
-                      fileSizeText: controller.readableSize,
-                      extension: controller.primaryExtension,
-                    ),
-                  ),
-                  SizedBox(height: sectionGap),
                   SavingFileNameField(
                     controller: controller.fileNameController,
                     onChanged: controller.onFileNameChanged,

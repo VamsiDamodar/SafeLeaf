@@ -18,8 +18,7 @@ class PreviewDocumentView extends GetView<PreviewDocumentViewModel> {
         final screenWidth = constraints.maxWidth;
         final screenHeight = constraints.maxHeight;
         final horizontalPadding = screenWidth * 0.06;
-        final previewHeight = (screenHeight * 0.40).clamp(210.0, 350.0).toDouble();
-        final titleFontSize = (screenWidth * 0.046).clamp(16.0, 21.0).toDouble();
+        final previewHeight = (screenHeight * 0.7).clamp(450.0, 550.0).toDouble();
         final metaFontSize = (screenWidth * 0.033).clamp(12.0, 15.0).toDouble();
         final buttonHeight = (screenHeight * 0.064).clamp(48.0, 58.0).toDouble();
         final buttonFontSize = (screenWidth * 0.038).clamp(13.0, 16.0).toDouble();
@@ -50,19 +49,8 @@ class PreviewDocumentView extends GetView<PreviewDocumentViewModel> {
                         isMultipleImages: controller.isMultipleImages,
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      controller.fileName,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.drawerHeaderTitle.copyWith(
-                        color: AppColors.primaryDark,
-                        fontSize: titleFontSize,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.008),
+                  
+                    SizedBox(height: screenHeight * 0.01),
                     Text(
                       '${controller.extension.toUpperCase()} . ${controller.getReadableSize()} . ${controller.getPageCountText()}',
                       maxLines: 1,

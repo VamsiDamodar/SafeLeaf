@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
-import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:safeleaf/data/database/app_database.dart';
 import 'package:safeleaf/data/models/document_model.dart';
 import 'package:safeleaf/routes/app_routes.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:safeleaf/widgets/home/rename_category_dialog.dart';
 
 class DocumentDetailsViewModel extends GetxController {
@@ -18,11 +17,10 @@ class DocumentDetailsViewModel extends GetxController {
   final fileSize = 0.obs;
   final extension = ''.obs;
   final pageCount = RxnInt();
-  final currentPdfPage = 0.obs;
-  final isPdfLoading = false.obs;
-  final pdfPages = <Uint8List>[].obs;
   final isFromDatabase = false.obs;
-  final pdfPageController = PageController();
+  final isPdfBytesLoading = false.obs;
+  final pdfViewerController = PdfViewerController();
+  Uint8List? pdfBytes;
 
   File? get file {
     final path = filePath.value.trim();
@@ -56,6 +54,7 @@ class DocumentDetailsViewModel extends GetxController {
         fileSize.value = _readFileSize(filePath.value);
         if (isPdf && hasFile) {
           pageCount.value = _readPdfPageCount(file!);
+          _loadPdfBytes();
         }
       } else {
         final files = List<File>.from(args['files'] ?? const <File>[]);
@@ -75,6 +74,7 @@ class DocumentDetailsViewModel extends GetxController {
               : _guessExtension(files.first.path);
           if (isPdf) {
             pageCount.value = _readPdfPageCount(files.first);
+            _loadPdfBytes();
           }
         }
       }
@@ -87,16 +87,30 @@ class DocumentDetailsViewModel extends GetxController {
     if (extension.value.isEmpty && file != null) {
       extension.value = _guessExtension(file!.path);
     }
-
-    if (isPdf && hasFile) {
-      _loadPdfPages();
-    }
   }
 
   @override
   void onClose() {
-    pdfPageController.dispose();
+    pdfViewerController.dispose();
     super.onClose();
+  }
+
+  Future<void> _loadPdfBytes() async {
+    final currentFile = file;
+    if (currentFile == null || !currentFile.existsSync()) return;
+    if (pdfBytes != null) return;
+
+    isPdfBytesLoading.value = true;
+    try {
+      pdfBytes = await currentFile.readAsBytes();
+      update(['pdf_viewer']);
+    } finally {
+      isPdfBytesLoading.value = false;
+    }
+  }
+
+  void onPdfPageChanged(PdfPageChangedDetails details) {
+    update(['pdf_viewer']);
   }
 
   void onBackTap() {
@@ -181,73 +195,12 @@ class DocumentDetailsViewModel extends GetxController {
     );
   }
 
-  void onPdfPreviousTap() {
-    if (currentPdfPage.value > 0) {
-      final nextPage = currentPdfPage.value - 1;
-      pdfPageController.animateToPage(
-        nextPage,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-      );
-      currentPdfPage.value = nextPage;
-    }
-  }
-
-  void onPdfNextTap() {
-    final count = pageCount.value ?? pdfPages.length;
-    if (count > 0 && currentPdfPage.value < count - 1) {
-      final nextPage = currentPdfPage.value + 1;
-      pdfPageController.animateToPage(
-        nextPage,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-      );
-      currentPdfPage.value = nextPage;
-    }
-  }
-
-  void onPdfPageChanged(int index) {
-    currentPdfPage.value = index;
-  }
-
   String getReadableSize() {
     final size = fileSize.value;
     if (size <= 0) return 'Unknown size';
     if (size < 1024) return '$size B';
     if (size < 1024 * 1024) return '${(size / 1024).toStringAsFixed(1)} KB';
     return '${(size / (1024 * 1024)).toStringAsFixed(1)} MB';
-  }
-
-  Future<void> _loadPdfPages() async {
-    final currentFile = file;
-    if (currentFile == null || !currentFile.existsSync()) return;
-
-    isPdfLoading.value = true;
-    try {
-      final bytes = await currentFile.readAsBytes();
-      final pageTotal = pageCount.value ?? _readPdfPageCount(currentFile) ?? 0;
-      if (pageTotal <= 0) {
-        pdfPages.clear();
-        return;
-      }
-
-      pageCount.value = pageTotal;
-      final rasterPages = await Printing.raster(
-        bytes,
-        pages: List<int>.generate(pageTotal, (index) => index),
-        dpi: 140,
-      ).toList();
-
-      final renderedPages = await Future.wait(
-        rasterPages.map((page) => page.toPng()),
-      );
-      pdfPages.assignAll(renderedPages);
-      currentPdfPage.value = 0;
-    } catch (_) {
-      pdfPages.clear();
-    } finally {
-      isPdfLoading.value = false;
-    }
   }
 
   String _guessExtension(String path) {
