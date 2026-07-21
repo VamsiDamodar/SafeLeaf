@@ -20,6 +20,20 @@ class SavingView extends GetView<SavingViewModel> {
         title: 'Saving',
         onBackTap: controller.onBackTap,
       ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: Obx(
+            () => SavingActionButtons(
+              onBackTap: controller.onBackTap,
+              onContinueTap: controller.onContinueTap,
+              continueEnabled: controller.canContinue,
+              isSaving: controller.isSaving.value,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -61,15 +75,6 @@ class SavingView extends GetView<SavingViewModel> {
                       selectedExtension: controller.selectedExtension.value,
                       extensions: controller.extensionOptions,
                       onChanged: controller.onExtensionSelected,
-                    ),
-                  ),
-                  SizedBox(height: sectionGap * 1.2),
-                  Obx(
-                    () => SavingActionButtons(
-                      onBackTap: controller.onBackTap,
-                      onContinueTap: controller.onContinueTap,
-                      continueEnabled: controller.canContinue,
-                      isSaving: controller.isSaving.value,
                     ),
                   ),
                 ],

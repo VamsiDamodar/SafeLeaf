@@ -24,7 +24,7 @@ class SavingActionButtons extends StatelessWidget {
           child: OutlinedButton(
             onPressed: onBackTap,
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               side: const BorderSide(color: AppColors.primary, width: 1.2),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -46,16 +46,15 @@ class SavingActionButtons extends StatelessWidget {
             onPressed: isSaving
                 ? null
                 : () {
-                    debugPrint('[Saving] Continue button pressed');
                     onContinueTap();
                   },
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 18),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               elevation: 0,
               backgroundColor: AppColors.primary,
               disabledBackgroundColor: AppColors.primary.withOpacity(.35),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
             child: isSaving

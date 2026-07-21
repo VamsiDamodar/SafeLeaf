@@ -72,9 +72,9 @@ class SavingViewModel extends GetxController {
   File? get primaryFile => files.isEmpty ? null : files.first;
 
   bool get canContinue =>
-      primaryFileName.trim().isNotEmpty &&
-      selectedCategory.value != null &&
-      primaryExtension.trim().isNotEmpty;
+    fileName.value.trim().isNotEmpty &&
+    selectedCategory.value != null &&
+    primaryExtension.trim().isNotEmpty;
 
   @override
   void onInit() {
@@ -89,15 +89,6 @@ class SavingViewModel extends GetxController {
       fileSizes.assignAll(List<int>.from(args['fileSizes'] ?? const <int>[]));
       extensions.assignAll(List<String>.from(args['extensions'] ?? const <String>[]));
 
-    }
-
-    if (fileNames.isNotEmpty) {
-      fileName.value = fileNames.first;
-      fileNameController.text = fileNames.first;
-    } else if (files.isNotEmpty) {
-      final fallbackName = p.basenameWithoutExtension(files.first.path);
-      fileName.value = fallbackName;
-      fileNameController.text = fallbackName;
     }
 
     if(files.length > 1 && files.every((file) => _isImageFile(file.path))) {
@@ -156,6 +147,14 @@ class SavingViewModel extends GetxController {
   }
 
   Future<void> onContinueTap() async {
+     if (fileNameController.text.trim().isEmpty) {
+    Get.snackbar(
+      'File name required',
+      'Please enter file name',
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    return;
+  }
     debugPrint(
       '[Saving] Continue tapped -> canContinue=$canContinue, selectedCategory=${selectedCategory.value?.id}, fileName=$primaryFileName, extension=$primaryExtension, files=${files.length}',
     );
@@ -207,6 +206,8 @@ class SavingViewModel extends GetxController {
         Routes.SAVING_SUCCESS,
         arguments: {
           'fileName': primaryFileName,
+          'filePath': savedPath,
+          'extension': primaryExtension,
         },
       );
     } catch (e) {
